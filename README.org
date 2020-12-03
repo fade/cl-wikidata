@@ -1,9 +1,9 @@
 * This project defines a Common Lisp interface to the Wikidata SPARQL query endpoint.
 
-- 11:08 < Lucas_WMDE> Fade: there’s not that much to the interface… you GET https://query.wikidata.org/sparql?query=SELECT...&format=json, basically
-- 11:08 < Lucas_WMDE> or a few other formats, and if you don’t specify a format in the parameters then the Accept header is respected
-- 11:08 < Lucas_WMDE> if the query is overly long you can also use POST instead of GET
-- 11:09 < Lucas_WMDE> there’s some more documentation at https://github.com/blazegraph/database/wiki/REST_API but not all of it applies to WDQS (e.g. there’s no public INSERT/DELETE/etc.)
-- 11:10 < Lucas_WMDE> (oh, and always include a User-Agent header or your request will get blocked somewhere in the traffic layer. see https://meta.wikimedia.org/wiki/User-Agent_policy)
-- 11:27 < Lucas_WMDE> the query service UI can also show code examples for how to use the query service from several languages
-- 11:27 < Lucas_WMDE> once you publish your library, maybe we can add a Common Lisp example for it 8)
+- there’s not that much to the interface… you GET https://query.wikidata.org/sparql?query=SELECT...&format=json, basically
+- or a few other formats, and if you don’t specify a format in the parameters then the Accept header is respected
+- if the query is overly long you can also use POST instead of GET
+- there’s some more documentation at https://github.com/blazegraph/database/wiki/REST_API but not all of it applies to WDQS (e.g. there’s no public INSERT/DELETE/etc.)
+- (oh, and always include a User-Agent header or your request will get blocked somewhere in the traffic layer. see https://meta.wikimedia.org/wiki/User-Agent_policy)
+- the query service UI can also show code examples for how to use the query service from several languages
+- once you publish your library, maybe we can add a Common Lisp example for it 8)
