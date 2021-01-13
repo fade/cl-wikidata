@@ -10,7 +10,7 @@
 (defparameter *wdataq* "https://query.wikidata.org/sparql"
   "the wikidata query endpoint..")
 
-(defparameter *user-agent* "CL-WIKIDATA/0.0 (https://github.com/fade/cl-wikidataa.git; fade@deepsky.com) sbcl/2.1.0"
+(defparameter *user-agent* "CL-WIKIDATA/0.0 (https://github.com/fade/cl-wikidata.git; fade@deepsky.com) sbcl/2.1.0"
   "This parameter holds the user agent string to identify this client
   with the wikidata sparql endpoint. Without it, wikidata would limit
   and then kill our service access.")
