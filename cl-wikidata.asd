@@ -8,9 +8,11 @@
   :depends-on (#:ALEXANDRIA
                #:RUTILS
                #:DEXADOR
+               #:JSOWN
                #:CL-PPCRE
                #:CL-SPARQL
-               #:CL-JSON-POINTER)
+               #:CL-JSON-POINTER
+               #:FLEXI-STREAMS)
   :pathname "./"
   :components ((:file "app-utils")
                (:file "cl-wikidata")))
