@@ -15,39 +15,53 @@
   with the wikidata sparql endpoint. Without it, wikidata would limit
   and then kill our service access.")
 
-
 (defparameter *query*
-  "SELECT
-  ?item ?itemLabel
-  ?value ?valueLabel
-# valueLabel is only useful for properties with item-datatype
-WHERE 
+  "SELECT DISTINCT ?airport ?airportLabel ?icaocode ?gps
+WHERE
 {
-  ?item wdt:P1800 ?value
-  # change P1800 to another property        
-  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }
+  ?airport wdt:P31 wd:Q1248784 ;
+           wdt:P239 ?icaocode ;
+           wdt:P625 ?gps .
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language \"en\" .
+  }
 }
-# remove or change limit for more results
-LIMIT 10")
+ORDER BY ?airportLabel"
+  "airports of the world.")
+
 
 (defparameter *getreturn* nil)
 
 (defun getdata (&key (query *query*) (endpoint *wdataq*) (user-agent *user-agent*))
   "Connect to :endpoint and ship the query."
-  (let* ((query query)) ;; (quri:url-encode query) dex implicitly encodes query parameters.
+  (format t "~&!!~A||~A||~A" query endpoint user-agent)
+  (let* ((qri query)) ;; (quri:url-encode query) dex implicitly encodes query parameters.
     (multiple-value-bind (body status headers uri connection)
         (handler-case
             (dex:request endpoint
                          :method :get
-                         :headers '(("User-Agent" . user-agent)
-                                    ("accept" . "application/sparql-results+json"))
-                         :content '(("format" . "json") ("query" . query))
-                         :read-timeout 3)
+                         :headers '(("User-Agent" . "CL-WIKIDATA/0.0 (https://github.com/fade/cl-wikidata.git; fade@deepsky.com) sbcl/2.1.0")
+                                    ("accept" . "application/json"))
+                         :content '(("format" . "json")
+                                    ("query" . qri))
+                         :verbose t)
           (error (c) c))
       (setf *getreturn* body)
       (format t "~&~{~A~^~%~}" (list status headers uri connection))))
   ;; body  
   )
+
+;; (defun getdata-drakma (&key (query *query*) (endpoint *wdataq*) (user-agent *user-agent*))
+;;   "Connect to :endpoint with drakma and ship the query."
+;;   (multiple-value-bind (body status headers uri connection)
+;;       (handler-case
+;;           (drakma:http-request endpoint
+;;                                ;; :method :post
+;;                                :user-agent :explorer
+;;                                         :parameters '(("format" . "json")
+;;                                                       ("query" . query))))
+;;     (setf *getreturn* body)
+;;     (format t "~&~{~A~^~%~}" (list status headers uri connection))))
 
 ;;;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;;; test post function
