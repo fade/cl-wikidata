@@ -16,18 +16,23 @@
   and then kill our service access.")
 
 (defparameter *query*
-  "SELECT DISTINCT ?airport ?airportLabel ?icaocode ?gps
+  "SELECT DISTINCT ?airport ?airportLabel ?icaocode ?iatacode ?gps
 WHERE
 {
   ?airport wdt:P31 wd:Q1248784 ;
            wdt:P239 ?icaocode ;
-           wdt:P625 ?gps .
+           OPTIONAL {
+             ?airport wdt:P238 ?iatacode .}
+           OPTIONAL {
+             ?airport wdt:P625 ?gps .}
   SERVICE wikibase:label {
     bd:serviceParam wikibase:language \"en\" .
   }
 }
 ORDER BY ?airportLabel"
-  "airports of the world.")
+  
+  "airports of the world with iata and icao codes, names, and gps
+  coordinates..")
 
 
 (defparameter *getreturn* nil)
@@ -59,7 +64,8 @@ ORDER BY ?airportLabel"
     (loop for i from 0 to (length (get-by-json-pointer obj "/results/bindings"))
           :collect
           (list (get-by-json-pointer obj (format nil "/results/bindings/~D/airportLabel/value" i))
-                (get-by-json-pointer obj (format nil "/results/bindings/~D/icaocode/value" i))))))
+                (get-by-json-pointer obj (format nil "/results/bindings/~D/icaocode/value" i))
+                (get-by-json-pointer obj (format nil "/results/bindings/~D/iatacode/value" i))))))
 
 ;; (defun getdata (&key (query *query*) (endpoint *wdataq*) (user-agent *user-agent*))
 ;;   "Connect to :endpoint and ship the query."
