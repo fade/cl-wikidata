@@ -63,9 +63,18 @@ ORDER BY ?airportLabel"
 
     (loop for i from 0 to (length (get-by-json-pointer obj "/results/bindings"))
           :collect
-          (list (get-by-json-pointer obj (format nil "/results/bindings/~D/airportLabel/value" i))
-                (get-by-json-pointer obj (format nil "/results/bindings/~D/icaocode/value" i))
-                (get-by-json-pointer obj (format nil "/results/bindings/~D/iatacode/value" i))))))
+          (list
+           (get-by-json-pointer obj (format nil "/results/bindings/~D/airport/value" i))
+           (get-by-json-pointer obj (format nil "/results/bindings/~D/airportLabel/value" i))
+           (get-by-json-pointer obj (format nil "/results/bindings/~D/icaocode/value" i))
+           (get-by-json-pointer obj (format nil "/results/bindings/~D/iatacode/value" i))
+           (get-by-json-pointer obj (format nil "/results/bindings/~D/gps/value" i))))))
+
+(defun print-icao-data (icao-data)
+  "Given a list of lists representing the ?airport, ?airportLabel, ?icaocode, ?iatacode and ?gps data for the world airports, nown to the WikiMedia foundation's wikidata service, print that data."
+  (loop for airport in icao-data
+        for index from 0
+        do (format t "~&[~05D]~{ ~A~^ || ~}~%" index airport)))
 
 (defun write-json-to-file (json file)
   (with-open-file (s file :direction :output :if-exists :supersede)
