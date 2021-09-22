@@ -1,0 +1,27 @@
+# -*- restclient -*-
+
+# interrogate the wikidata SPARQL endpoint
+
+GET https://query.wikidata.org/sparql
+Accept: application/json 
+User-Agent: Emacs Restclient
+
+"query":"SELECT DISTINCT ?airport ?airportLabel ?icaocode
+WHERE
+{
+  ?airport wdt:P31 wd:Q1248784 ;
+           wdt:P239 ?icaocode .
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en" .
+  }
+}
+ORDER BY ?airportLabel",
+"format":"json"
+
+#"query":"SELECT%0A%20%20%3Fitem%20%3FitemLabel%0A%20%20%3Fvalue%20%3FvalueLabel%0AWHERE%20%0A%7B%0A%20%20%3Fitem%20wdt%3AP1800%20%3Fvalue%0A%20%20%23%20change%20P1800%20to%20another%20property%20%20%20%20%20%20%20%20%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cen%22.%20%7D%0A%7D%0ALIMIT%2010","format":"json"
+
+# Just do it manually. :(
+
+GET https://query.wikidata.org/sparql?format=json&query=%0A%23Airports+on+earth%0ASELECT+DISTINCT+%3Fairport+%3FairportLabel+%3Ficaocode%0AWHERE%0A%7B%0A++%3Fairport+wdt%3AP31+wd%3AQ1248784+%3B%0A+++++++++++wdt%3AP239+%3Ficaocode+.%0A++SERVICE+wikibase%3Alabel+%7B%0A++++bd%3AserviceParam+wikibase%3Alanguage+%22en%22+.%0A++%7D%0A%7D%0AORDER+BY+%3FairportLabel%0A
+Accept: application/json
+User-Agent: Emacs Restclient
